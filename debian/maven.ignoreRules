@@ -1,0 +1,9 @@
+
+com.univocity univocity-output-tester
+org.apache.maven.plugins maven-assembly-plugin
+org.apache.maven.plugins maven-enforcer-plugin
+org.apache.maven.plugins maven-javadoc-plugin
+org.apache.maven.plugins maven-source-plugin
+org.hsqldb hsqldb
+org.sonatype.plugins nexus-staging-maven-plugin
+org.testng testng

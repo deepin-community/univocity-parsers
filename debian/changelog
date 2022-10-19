@@ -1,0 +1,12 @@
+univocity-parsers (2.8.3-2) unstable; urgency=medium
+
+  * Team upload.
+  * Source-only upload to allow migration to testing.
+
+ -- Markus Koschany <apo@debian.org>  Sun, 24 Nov 2019 01:42:14 +0100
+
+univocity-parsers (2.8.3-1) unstable; urgency=medium
+
+  * Initial release (Closes: #941965)
+
+ -- Emmanuel Bourg <ebourg@apache.org>  Tue, 08 Oct 2019 10:39:49 +0200

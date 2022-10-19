@@ -1,0 +1,23 @@
+Source: univocity-parsers
+Section: java
+Priority: optional
+Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
+Uploaders: Emmanuel Bourg <ebourg@apache.org>
+Build-Depends:
+ debhelper-compat (= 12),
+ default-jdk,
+ libmaven-bundle-plugin-java,
+ maven-debian-helper
+Standards-Version: 4.4.1
+Vcs-Git: https://salsa.debian.org/java-team/univocity-parsers.git
+Vcs-Browser: https://salsa.debian.org/java-team/univocity-parsers
+Homepage: https://www.univocity.com/pages/about-parsers
+
+Package: libunivocity-parsers-java
+Architecture: all
+Depends: ${maven:Depends}, ${misc:Depends}
+Suggests: ${maven:OptionalDepends}
+Description: Parsers for CSV, TSV and fixed width files
+ univocity-parsers is a collection of extremely fast and reliable parsers
+ for Java. It provides a consistent interface for handling different file
+ formats, and a solid framework for the development of new parsers.
