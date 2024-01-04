@@ -74,6 +74,8 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 	protected boolean ignoreTrailingWhitespace;
 	protected boolean ignoreLeadingWhitespace;
 
+	private final boolean processComments;
+
 	/**
 	 * All parsers must support, at the very least, the settings provided by {@link CommonParserSettings}. The AbstractParser requires its configuration to be
 	 * properly initialized.
@@ -96,6 +98,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 		this.comments = collectComments ? new TreeMap<Long, String>() : Collections.<Long, String>emptyMap();
 		this.extractHeaders = settings.isHeaderExtractionEnabled();
 		this.whitespaceRangeStart = settings.getWhitespaceRangeStart();
+		this.processComments = settings.isCommentProcessingEnabled();
 	}
 
 	protected void processComment() {
@@ -127,7 +130,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 			while (!context.isStopped()) {
 				input.markRecordStart();
 				ch = input.nextChar();
-				if (inComment()) {
+				if (processComments && inComment()) {
 					processComment();
 					continue;
 				}
@@ -261,7 +264,11 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 		}
 
 		if (input instanceof AbstractCharInputReader) {
-			((AbstractCharInputReader) input).addInputAnalysisProcess(getInputAnalysisProcess());
+			AbstractCharInputReader inputReader = ((AbstractCharInputReader) input);
+			inputReader.addInputAnalysisProcess(getInputAnalysisProcess());
+			for(InputAnalysisProcess p : settings.getInputAnalysisProcesses()){
+				inputReader.addInputAnalysisProcess(p);
+			}
 		}
 
 		try {
@@ -566,7 +573,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 			while (!context.isStopped()) {
 				input.markRecordStart();
 				ch = input.nextChar();
-				if (inComment()) {
+				if (processComments && inComment()) {
 					processComment();
 					continue;
 				}
@@ -672,7 +679,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 			while (!context.isStopped()) {
 				input.markRecordStart();
 				ch = input.nextChar();
-				if (inComment()) {
+				if (processComments && inComment()) {
 					processComment();
 					return null;
 				}

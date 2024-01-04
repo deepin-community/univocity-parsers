@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018 Univocity Software Pty Ltd
+ * Copyright 2020 Univocity Software Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,45 @@
 package com.univocity.parsers.issues.github;
 
 
-import com.univocity.parsers.examples.*;
-import com.univocity.parsers.fixed.*;
+import com.univocity.parsers.csv.*;
 import org.testng.annotations.*;
 
+import java.io.*;
 import java.util.*;
 
+import static org.testng.Assert.*;
+
 /**
- * From: https://github.com/univocity/univocity-parsers/issues/276
+ * From: https://github.com/univocity/univocity-parsers/issues/383
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public class Github_276 extends Example {
+public class Github_383 {
+
 
 	@Test
-	public void testKeepPaddingFlag() throws Exception {
+	public void testFieldNameExclusionError() {
+		CsvParserSettings settings = new CsvParserSettings();
+		settings.setHeaderExtractionEnabled(true);
+		settings.excludeFields("x", "y");
 
-		FixedWidthFields fields = new FixedWidthFields(4, 5, 40, 40, 8);
-		fields.stripPaddingFrom(0, 1, 4);
+		CsvParser parser = new CsvParser(settings);
 
-		FixedWidthParserSettings settings = new FixedWidthParserSettings(fields);
-		settings.setKeepPadding(true);
-		settings.getFormat().setPadding('_');
-		settings.getFormat().setLineSeparator("\n");
+		String[] row = parser.parseAll(new StringReader("a,b,x\n1,2,3")).get(0);
+		assertEquals(Arrays.toString(row), "[1, 2]");
 
-		FixedWidthParser parser = new FixedWidthParser(settings);
+	}
 
-		List<String[]> allRows = parser.parseAll(getReader("/examples/example.txt"));
-		
-		printAndValidate(null, allRows);
+	@Test
+	public void testIndexExclusionError() {
+		CsvParserSettings settings = new CsvParserSettings();
+		settings.excludeIndexes(2, 3);
+
+		CsvParser parser = new CsvParser(settings);
+
+		String[] row = parser.parseAll(new StringReader("1,2,3")).get(0);
+		assertEquals(Arrays.toString(row), "[1, 2]");
+
 	}
 
 }

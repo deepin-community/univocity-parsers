@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018 Univocity Software Pty Ltd
+ * Copyright 2019 Univocity Software Pty Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,37 @@
 package com.univocity.parsers.issues.github;
 
 
-import com.univocity.parsers.examples.*;
-import com.univocity.parsers.fixed.*;
+import com.univocity.parsers.csv.*;
 import org.testng.annotations.*;
 
+import java.io.*;
 import java.util.*;
 
+import static org.testng.Assert.*;
+
 /**
- * From: https://github.com/univocity/univocity-parsers/issues/276
+ * From: https://github.com/univocity/univocity-parsers/issues/362
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public class Github_276 extends Example {
+public class Github_362 {
 
 	@Test
-	public void testKeepPaddingFlag() throws Exception {
-
-		FixedWidthFields fields = new FixedWidthFields(4, 5, 40, 40, 8);
-		fields.stripPaddingFrom(0, 1, 4);
-
-		FixedWidthParserSettings settings = new FixedWidthParserSettings(fields);
-		settings.setKeepPadding(true);
-		settings.getFormat().setPadding('_');
-		settings.getFormat().setLineSeparator("\n");
-
-		FixedWidthParser parser = new FixedWidthParser(settings);
-
-		List<String[]> allRows = parser.parseAll(getReader("/examples/example.txt"));
-		
-		printAndValidate(null, allRows);
+	public void testCommentCharWriting() {
+		StringWriter sw = new StringWriter();
+		{
+			CsvWriterSettings writerSettings = new CsvWriterSettings();
+			CsvWriter writer = new CsvWriter(sw, writerSettings);
+			writer.writeRow(new String[]{"#field1", "field2", "field3"});
+			writer.close();
+		}
+		StringReader sr = new StringReader(sw.toString());
+		{
+			CsvParserSettings parserSettings = new CsvParserSettings();
+			CsvParser parser = new CsvParser(parserSettings);
+			List<String[]> rows = parser.parseAll(sr);
+			String[] row = rows.get(0);
+			assertEquals(row[0], "#field1");
+		}
 	}
-
 }

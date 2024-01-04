@@ -1,3 +1,12 @@
+univocity-parsers (2.9.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * Fixed the build failure with OpenJDK 17 (Closes: #1011602)
+  * Standards-Version updated to 4.6.1
+  * Switch to debhelper level 13
+
+ -- Emmanuel Bourg <ebourg@apache.org>  Wed, 01 Jun 2022 19:04:23 +0200
+
 univocity-parsers (2.8.3-2) unstable; urgency=medium
 
   * Team upload.
